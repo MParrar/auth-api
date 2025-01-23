@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { generateToken } = require('../../src/utils/token');
+const dotenv = require('dotenv');
+
+dotenv.config()
 
 jest.mock('jsonwebtoken');
 
@@ -21,7 +24,7 @@ describe('generateToken', () => {
         expect(jwt.sign).toHaveBeenCalledWith(
             { userId: mockUserId, role: mockRole, sessionToken: mockSessionToken },
             mockSecret,
-            { expiresIn: '1h' }
+            { expiresIn: process.env.JWT_EXPIRES_IN }
         );
         expect(token).toBe('mockedToken');
     });

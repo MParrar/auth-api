@@ -3,7 +3,7 @@ const { app } = require("../../src/app");
 const pool = require("../../src/config/db");
 const { generateToken } = require('../../src/utils/token');
 
-const mockUser = {
+const userData = {
     email: "logout@example.com",
     name: "Jane Doe",
     password: "Password123",
@@ -21,15 +21,16 @@ const mockUser = {
         INSERT INTO public.user (name, email, password, role, session_token)
         VALUES ($1, $2, $3, $4, $5) RETURNING id;
       `,
-        [mockUser.name, mockUser.email, mockUser.password, mockUser.role, mockUser.sessionToken]
+        [userData.name, userData.email, userData.password, userData.role, userData.sessionToken]
       );
   
       userId = result.rows[0].id;
-      token = generateToken(userId, mockUser.role, mockUser.sessionToken);
+      token = generateToken(userId, userData.role, userData.sessionToken);
     });
   
     afterAll(async () => {
-      await pool.query("TRUNCATE TABLE public.user RESTART IDENTITY CASCADE;");
+      await pool.query(`DELETE FROM public.user WHERE id = $1;`, [userId]
+      );
       await pool.end();
     });
   

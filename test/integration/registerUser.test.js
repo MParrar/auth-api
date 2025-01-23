@@ -1,31 +1,56 @@
 const supertest = require("supertest");
 const { app } = require("../../src/app");
 const pool = require("../../src/config/db");
+const bcrypt = require("bcryptjs");
 
-const userInput = {
+jest.mock("../../src/services/emailServices", () => ({
+  sendEmail: jest.fn(),
+}));
+
+const { sendEmail } = require("../../src/services/emailServices");
+
+const userData = {
   email: "register@example.com",
-  name: "Jane Doe",
-  password: "Password123",
+  name: "John Doe",
+  password: "SecurePass123",
   role: "user",
+  sessionToken: "mock-register-token",
 };
 
-describe("POST /api/users/register", () => {
+describe("POST /api/register", () => {
+  beforeAll(async () => {
+    await pool.query(
+      `
+      DELETE FROM public.user WHERE email = $1;
+    `,
+      [userData.email]
+    );
+  });
+
   afterAll(async () => {
-    await pool.query("TRUNCATE TABLE public.user");
+    await pool.query(
+      `
+      DELETE FROM public.user WHERE email = $1;
+    `,
+      [userData.email]
+    );
     await pool.end();
   });
-  describe("user registration", () => {
-    describe("given the email, name, password and role are valid", () => {
-      it("should return the user payload", async () => {
-        const { statusCode, body } = await supertest(app)
-          .post("/api/users/register")
-          .send(userInput);
 
-        expect(statusCode).toBe(201);
-        expect(body.user.id).toEqual(expect.any(Number));
-        expect(body.user.email).toEqual(userInput.email);
-        expect(body.user.name).toEqual(userInput.name);
-      });
+  describe("Successful registration", () => {
+    it("should register a user and call sendEmail", async () => {
+      const { statusCode, body } = await supertest(app)
+        .post("/api/users/register")
+        .send({
+          name: userData.name,
+          email: userData.email,
+          password: userData.password,
+        });
+
+      expect(statusCode).toBe(201);
+      expect(body.status).toEqual("success");
+
+      expect(sendEmail).toHaveBeenCalledTimes(1);
     });
   });
   describe("given an empty payload", () => {
@@ -43,7 +68,7 @@ describe("POST /api/users/register", () => {
       const { statusCode, body } = await supertest(app)
         .post("/api/users/register")
         .send({
-            ...userInput,
+            ...userData,
             password: '1234567'
         });
         expect(statusCode).toBe(400);

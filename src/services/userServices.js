@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const sendEmail = require("./emailServices");
+const { sendEmail } = require("./emailServices");
 const pool = require("../config/db");
 const { createAuditLog } = require("./adminServices");
 
@@ -84,7 +84,7 @@ const updateUserProfile = async (req, id, name, email, currentUser) => {
   }
 
   const existingUser = await findUserByEmail(email);
-  if (existingUser.length > 0) {
+  if (existingUser.length > 0 && existingUser[0].id != id) {
     throw new Error("User already exists");
   }
 

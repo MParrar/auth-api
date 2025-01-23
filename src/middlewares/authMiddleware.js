@@ -35,35 +35,6 @@ const verifyToken = async (req, res, next) => {
     }
   };
 
-
-  const verifyTokenForLogout = async (req, res, next) => {
-    const token = req.header('Authorization')?.split(' ')[1];
-    
-    if (!token) {
-      return res.status(401).json({ status: 'error', message: 'Access Denied' });
-    }
-  
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      
-      const userQuery = await pool.query(
-        'SELECT id, name, email, role, session_token FROM public.user WHERE id = $1',
-        [decoded.userId]
-      );
-      
-      const user = userQuery.rows[0];
-  
-      if (!user || user.session_token !== decoded.sessionToken) {
-        return res.status(403).json({ status: 'error', message: 'Invalid session' });
-      }
-      
-      req.user = user;
-      
-      next();
-    } catch (err) {
-      return res.status(403).json({ status: 'error', message: 'Invalid token' });
-    }
-  };
   
   
-module.exports = { verifyToken, verifyTokenForLogout };
+module.exports = { verifyToken };

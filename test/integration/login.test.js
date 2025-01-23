@@ -3,7 +3,7 @@ const { app } = require("../../src/app");
 const pool = require("../../src/config/db");
 const bcrypt = require("bcryptjs");
 
-const mockUser = {
+const userData = {
   email: "login@example.com",
   name: "Jane Doe",
   password: "Password123",
@@ -19,17 +19,19 @@ describe("POST /api/login", () => {
         VALUES ($1, $2, $3, $4, $5) RETURNING id;
       `,
       [
-        mockUser.name,
-        mockUser.email,
-        await bcrypt.hash(mockUser.password, 10),
-        mockUser.role,
-        mockUser.sessionToken,
+        userData.name,
+        userData.email,
+        await bcrypt.hash(userData.password, 10),
+        userData.role,
+        userData.sessionToken,
       ]
     );
   });
 
   afterAll(async () => {
-    await pool.query("TRUNCATE TABLE public.user RESTART IDENTITY CASCADE;");
+    await pool.query(`DELETE FROM public.user WHERE email = $1;`, [userData.email]
+    );
+
     await pool.end();
   });
 
@@ -38,8 +40,8 @@ describe("POST /api/login", () => {
       const { statusCode, body } = await supertest(app)
         .post("/api/login")
         .send({
-          email: mockUser.email,
-          password: mockUser.password,
+          email: userData.email,
+          password: userData.password,
         });
       expect(statusCode).toBe(200);
       expect(body.status).toEqual("success");
@@ -50,7 +52,7 @@ describe("POST /api/login", () => {
       const { statusCode, body } = await supertest(app)
         .post("/api/login")
         .send({
-          email: mockUser.email,
+          email: userData.email,
           password: "BadPassword",
         });
 

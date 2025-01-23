@@ -80,7 +80,7 @@ const resetPassword = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    await removeSessionToken(req.user.id);
+    await removeSessionToken(req.user.userId);
     res.status(200).json({
       status: "success",
       message: "User logout",

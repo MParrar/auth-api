@@ -2,7 +2,7 @@ const pool = require("../config/db");
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const sendEmail = require('./emailServices');
+const { sendEmail } = require('./emailServices');
 const { generateToken } = require("../utils/token");
 const dotenv = require('dotenv');
 
@@ -42,7 +42,7 @@ const sendPasswordResetEmail = async (email) => {
   const resetToken = jwt.sign(
     { email: user.rows[0].email },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: process.env.JWT_EXPIRES_IN }
   );
 
   const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;

@@ -22,10 +22,6 @@ jobs:
         run: |
           npm install
 
-      - name: Build project
-        run: |
-          npm run build  # Si tienes un script de construcción
-
       - name: Vercel Deploy
         uses: amondnet/vercel-action@v20
         with:

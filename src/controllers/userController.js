@@ -1,5 +1,5 @@
 
-const dotenv = require("dotenv");
+const dotenv = require('dotenv');
 
 const {
   getUserProfileById,
@@ -7,7 +7,7 @@ const {
   createUser,
   changeUserPassword,
   removeUser,
-} = require("../services/userServices");
+} = require('../services/userServices');
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ const registerUser = async (req, res) => {
     const newUser = await createUser(req, name, email, password, role);
 
     res.status(201).json({
-      status: "success",
+      status: 'success',
       user: {
         id: newUser.id,
         name: newUser.name,
@@ -26,16 +26,16 @@ const registerUser = async (req, res) => {
     });
   } catch (error) {
     const errorMapping = {
-      "You need to provide name, email and password": 400,
-      "The password must contain at least 8 characters": 400,
-      "User already exists": 400,
+      'You need to provide name, email and password': 400,
+      'The password must contain at least 8 characters': 400,
+      'User already exists': 400,
     };
 
     const statusCode = errorMapping[error.message] || 500;
-    const message = statusCode === 500 ? "Server error" : error.message;
+    const message = statusCode === 500 ? 'Server error' : error.message;
 
     return res.status(statusCode).json({
-      status: "error",
+      status: 'error',
       message,
     });
   }
@@ -45,7 +45,7 @@ const getProfile = async (req, res) => {
   try {
     const user = await getUserProfileById(req.user.userId);
     res.status(200).json({
-      status: "success",
+      status: 'success',
       user,
     });
   } catch (error) {
@@ -61,8 +61,8 @@ const updateProfile = async (req, res) => {
     const updatedUser = await updateUserProfile(req, id, name, email, req.user);
 
     res.status(200).json({
-      status: "success",
-      message: "User Updated Successfully",
+      status: 'success',
+      message: 'User Updated Successfully',
       user: {
         name: updatedUser.name,
         email: updatedUser.email,
@@ -71,16 +71,15 @@ const updateProfile = async (req, res) => {
     });
   } catch (error) {
     const errorMapping = {
-      "User not found": 400,
-      "You need to provide id, email and name": 400,
-      "User already exists": 400
+      'User not found': 400,
+      'You need to provide id, email and name': 400,
+      'User already exists': 400
     };
 
     const statusCode = errorMapping[error.message] || 500;
-    const message = statusCode === 500 ? "Server error" : error.message;
-
+    const message = statusCode === 500 ? 'Server error' : error.message;
     return res.status(statusCode).json({
-      status: "error",
+      status: 'error',
       message,
     });
   }
@@ -95,19 +94,19 @@ const changePassword = async (req, res) => {
     await changeUserPassword(req, id, password, req.user)
 
     res.status(200).json({
-      status: "success",
-      message: "Password has been changed successfully",
+      status: 'success',
+      message: 'Password has been changed successfully',
     });
   } catch (error) {
     const errorMapping = {
-      "User not found": 400,
+      'User not found': 400,
     };
 
     const statusCode = errorMapping[error.message] || 500;
-    const message = statusCode === 500 ? "Server error" : error.message;
+    const message = statusCode === 500 ? 'Server error' : error.message;
 
     return res.status(statusCode).json({
-      status: "error",
+      status: 'error',
       message,
     });
   }
@@ -120,19 +119,19 @@ const archiveProfile = async (req, res) => {
     await removeUser(req, id)
 
     res.status(200).json({
-      status: "success",
-      message: "User removed",
+      status: 'success',
+      message: 'User removed',
     });
   } catch (error) {
     const errorMapping = {
-      "User not found": 400,
+      'User not found': 400,
     };
 
     const statusCode = errorMapping[error.message] || 500;
-    const message = statusCode === 500 ? "Server error" : error.message;
+    const message = statusCode === 500 ? 'Server error' : error.message;
 
     return res.status(statusCode).json({
-      status: "error",
+      status: 'error',
       message,
     });
   }

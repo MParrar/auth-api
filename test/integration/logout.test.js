@@ -1,17 +1,17 @@
-const supertest = require("supertest");
-const { app } = require("../../src/app");
-const pool = require("../../src/config/db");
+const supertest = require('supertest');
+const { app } = require('../../src/app');
+const pool = require('../../src/config/db');
 const { generateToken } = require('../../src/utils/token');
 
 const userData = {
-    email: "logout@example.com",
-    name: "Jane Doe",
-    password: "Password123",
-    role: "user",
-    sessionToken: "mock-logout-token",
+    email: 'logout@example.com',
+    name: 'Jane Doe',
+    password: 'Password123',
+    role: 'user',
+    sessionToken: 'mock-logout-token',
   };
   
-  describe("POST /api/logout", () => {
+  describe('POST /api/logout', () => {
     let userId;
     let token;
   
@@ -34,15 +34,15 @@ const userData = {
       await pool.end();
     });
   
-    describe("given a valid request", () => {
-      it("should return a success message", async () => {
+    describe('given a valid request', () => {
+      it('should return a success message', async () => {
         const { statusCode, body } = await supertest(app)
-          .post("/api/logout")
-          .set("Authorization", `Bearer ${token}`);
+          .post('/api/logout')
+          .set('Authorization', `Bearer ${token}`);
   
         expect(statusCode).toBe(200);
-        expect(body.status).toEqual("success");
-        expect(body.message).toEqual("User logout");
+        expect(body.status).toEqual('success');
+        expect(body.message).toEqual('User logout');
       });
     });
 });

@@ -1,17 +1,17 @@
-const supertest = require("supertest");
-const { app } = require("../../src/app");
-const pool = require("../../src/config/db");
-const bcrypt = require("bcryptjs");
+const supertest = require('supertest');
+const { app } = require('../../src/app');
+const pool = require('../../src/config/db');
+const bcrypt = require('bcryptjs');
 
 const userData = {
-  email: "login@example.com",
-  name: "Jane Doe",
-  password: "Password123",
-  role: "user",
-  sessionToken: "mock-log-token",
+  email: 'login@example.com',
+  name: 'Jane Doe',
+  password: 'Password123',
+  role: 'user',
+  sessionToken: 'mock-log-token',
 };
 
-describe("POST /api/login", () => {
+describe('POST /api/login', () => {
   beforeAll(async () => {
     await pool.query(
       `
@@ -35,29 +35,29 @@ describe("POST /api/login", () => {
     await pool.end();
   });
 
-  describe("Successfully login", () => {
-    it("should return the token", async () => {
+  describe('Successfully login', () => {
+    it('should return the token', async () => {
       const { statusCode, body } = await supertest(app)
-        .post("/api/login")
+        .post('/api/login')
         .send({
           email: userData.email,
           password: userData.password,
         });
       expect(statusCode).toBe(200);
-      expect(body.status).toEqual("success");
+      expect(body.status).toEqual('success');
     });
   });
-  describe("Wrong credentials", () => {
-    it("should return an error", async () => {
+  describe('Wrong credentials', () => {
+    it('should return an error', async () => {
       const { statusCode, body } = await supertest(app)
-        .post("/api/login")
+        .post('/api/login')
         .send({
           email: userData.email,
-          password: "BadPassword",
+          password: 'BadPassword',
         });
 
       expect(statusCode).toBe(400);
-      expect(body.message).toEqual("Email or password wrong");
+      expect(body.message).toEqual('Email or password wrong');
     });
   });
 });

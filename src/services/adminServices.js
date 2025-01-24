@@ -1,4 +1,4 @@
-const pool = require("../config/db");
+const pool = require('../config/db');
 
 const createAuditLog = async (req, oldData) => {
   const user = req.user;
@@ -49,7 +49,7 @@ const getAuditLogs = async () => {
 
 const getUsers = async () => {
   const users = await pool.query(
-    "SELECT id, name, email, role FROM public.user order by id"
+    'SELECT id, name, email, role FROM public.user order by id'
   );
   return users.rows;
 };

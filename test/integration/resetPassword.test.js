@@ -1,17 +1,17 @@
-const supertest = require("supertest");
-const { app } = require("../../src/app");
-const pool = require("../../src/config/db");
-const { generateToken } = require("../../src/utils/token");
+const supertest = require('supertest');
+const { app } = require('../../src/app');
+const pool = require('../../src/config/db');
+const { generateToken } = require('../../src/utils/token');
 
 const userData = {
-  email: "reset@example.com",
-  name: "Jane Doe",
-  password: "Password123",
-  role: "user",
-  sessionToken: "mock-reset-token",
+  email: 'reset@example.com',
+  name: 'Jane Doe',
+  password: 'Password123',
+  role: 'user',
+  sessionToken: 'mock-reset-token',
 };
 
-describe("POST /reset-password", () => {
+describe('POST /reset-password', () => {
   let userId;
   let token;
   beforeAll(async () => {
@@ -38,27 +38,27 @@ describe("POST /reset-password", () => {
     await pool.end();
   });
 
-  it("should return 200 and success message", async () => {
+  it('should return 200 and success message', async () => {
 
     const response = await supertest(app)
-      .post("/api/reset-password")
+      .post('/api/reset-password')
       .send({ password: userData.password, token });
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
-      status: "success",
-      message: "Password updated successfully",
+      status: 'success',
+      message: 'Password updated successfully',
     });
   });
 
-  it("should return 400 with message about email is required", async () => {
-    const response = await supertest(app).post("/api/reset-password")
+  it('should return 400 with message about email is required', async () => {
+    const response = await supertest(app).post('/api/reset-password')
     .send({token});
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({
-      status: "error",
-      message: "You need to provide token and password",
+      status: 'error',
+      message: 'You need to provide token and password',
     });
   });
 });

@@ -1,5 +1,5 @@
-const { MailerSend, EmailParams, Sender, Recipient } = require("mailersend");
-const dotenv = require("dotenv");
+const { MailerSend, EmailParams, Sender, Recipient } = require('mailersend');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -10,7 +10,7 @@ const sendEmail = async (to, subject, text) => {
 
   const sentFrom = new Sender(
   `noreply@${process.env.EMAIL_SENDER}`,
-  "noreply"
+  'noreply'
   );
 
   const recipients = [new Recipient(to)];
@@ -22,11 +22,8 @@ const sendEmail = async (to, subject, text) => {
     .setSubject(subject)
     .setText(text);
 
-  try {
-    await mailerSend.email.send(emailParams);
-  } catch (error) {
-    throw error;
-  }
+  await mailerSend.email.send(emailParams);
+ 
 };
 
 module.exports = { sendEmail };

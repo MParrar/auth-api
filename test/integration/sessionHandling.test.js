@@ -1,17 +1,17 @@
-const supertest = require("supertest");
-const { app } = require("../../src/app");
-const pool = require("../../src/config/db");
+const supertest = require('supertest');
+const { app } = require('../../src/app');
+const pool = require('../../src/config/db');
 const { generateToken } = require('../../src/utils/token');
 
 const userData = {
-    email: "session@example.com",
-    name: "Jane Doe",
-    password: "Password123",
-    role: "user",
-    sessionToken: "mock-session-token",
+    email: 'session@example.com',
+    name: 'Jane Doe',
+    password: 'Password123',
+    role: 'user',
+    sessionToken: 'mock-session-token',
   };
   
-  describe("User with session request resource, after user logout then try again request the resource", () => {
+  describe('User with session request resource, after user logout then try again request the resource', () => {
     let userId;
     let token;
   
@@ -35,11 +35,11 @@ const userData = {
     });
   
   
-    describe("given a valid token request profile, logout and ask again for the profile", () => {
-      it("should return the user profile first and then a invalid token message", async () => {
+    describe('given a valid token request profile, logout and ask again for the profile', () => {
+      it('should return the user profile first and then a invalid token message', async () => {
         const profileResponse = await supertest(app)
-        .get("/api/users/profile")
-        .set("Authorization", `Bearer ${token}`);
+        .get('/api/users/profile')
+        .set('Authorization', `Bearer ${token}`);
   
         expect(profileResponse.statusCode).toBe(200);
         expect(profileResponse.body.user).toEqual({
@@ -49,18 +49,18 @@ const userData = {
           role: userData.role,
         });
         const logoutResponse = await supertest(app)
-        .post("/api/logout")
-        .set("Authorization", `Bearer ${token}`);
+        .post('/api/logout')
+        .set('Authorization', `Bearer ${token}`);
 
         expect(logoutResponse.statusCode).toBe(200);
-        expect(logoutResponse.body.status).toEqual("success");
-        expect(logoutResponse.body.message).toEqual("User logout")
+        expect(logoutResponse.body.status).toEqual('success');
+        expect(logoutResponse.body.message).toEqual('User logout')
 
         const profileAfterLogoutResponse = await supertest(app)
-        .get("/api/users/profile")
-        .set("Authorization", `Bearer ${token}`);
+        .get('/api/users/profile')
+        .set('Authorization', `Bearer ${token}`);
         expect(profileAfterLogoutResponse.statusCode).toBe(403);
-        expect(profileAfterLogoutResponse.body.message).toBe("Invalid or expired session")
+        expect(profileAfterLogoutResponse.body.message).toBe('Invalid or expired session')
       });
     });
 

@@ -1,26 +1,26 @@
-const pool = require("../config/db");
-const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { sendEmail } = require("./emailServices");
-const { generateToken } = require("../utils/token");
-const dotenv = require("dotenv");
+const pool = require('../config/db');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { sendEmail } = require('./emailServices');
+const { generateToken } = require('../utils/token');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
 const userLoginProcess = async (email, password) => {
   const userQuery = await pool.query(
-    "SELECT * FROM public.user WHERE email = $1",
+    'SELECT * FROM public.user WHERE email = $1',
     [email]
   );
   const user = userQuery.rows[0];
   if (!user || !(await bcrypt.compare(password, user.password))) {
-    throw new Error("Email or password wrong");
+    throw new Error('Email or password wrong');
   }
 
-  const sessionToken = crypto.randomBytes(32).toString("hex");
+  const sessionToken = crypto.randomBytes(32).toString('hex');
 
-  await pool.query("UPDATE public.user SET session_token = $1 WHERE id = $2", [
+  await pool.query('UPDATE public.user SET session_token = $1 WHERE id = $2', [
     sessionToken,
     user.id,
   ]);
@@ -32,10 +32,10 @@ const userLoginProcess = async (email, password) => {
 
 const sendPasswordResetEmail = async (email) => {
   if (!email) {
-    throw new Error("You need to provide an email");
+    throw new Error('You need to provide an email');
   }
 
-  const user = await pool.query("SELECT * FROM public.user WHERE email = $1", [
+  const user = await pool.query('SELECT * FROM public.user WHERE email = $1', [
     email,
   ]);
 
@@ -53,32 +53,32 @@ const sendPasswordResetEmail = async (email) => {
 
   await sendEmail(
     email,
-    "Password Reset Request",
+    'Password Reset Request',
     `Hello ${user.rows[0].name}, \n\nWe received a request to reset your password. Please click the link below to reset it:\n\n${resetLink}\n\nIf you didn't request this, please ignore this email.`
   );
 };
 
 const resetUserPassword = async (userId, token, password) => {
   if (!token || !password) {
-    throw new Error("You need to provide token and password");
+    throw new Error('You need to provide token and password');
   }
 
   if (password.length < 8) {
-    throw new Error("The password must contain at least 8 characters");
+    throw new Error('The password must contain at least 8 characters');
   }
 
-  const user = await pool.query("SELECT * FROM public.user WHERE id = $1", [
+  const user = await pool.query('SELECT * FROM public.user WHERE id = $1', [
     userId,
   ]);
 
   if (user.rows.length === 0) {
-    throw new Error("User not found");
+    throw new Error('User not found');
 
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  await pool.query("UPDATE public.user SET password = $1 WHERE id = $2", [
+  await pool.query('UPDATE public.user SET password = $1 WHERE id = $2', [
     hashedPassword,
     userId,
   ]);
@@ -87,11 +87,11 @@ const resetUserPassword = async (userId, token, password) => {
 const removeSessionToken = async (userId) => {
   try {
     await pool.query(
-      "UPDATE public.user SET session_token = NULL WHERE id = $1",
+      'UPDATE public.user SET session_token = NULL WHERE id = $1',
       [userId]
     );
   } catch (error) {
-    throw new Error(error.message || "Server error");
+    throw new Error(error.message || 'Server error');
   }
 };
 module.exports = {

@@ -9,4 +9,4 @@ const verifyRole = (roles) => {
     };
   };
 
-  module.exports = { verifyRole }
+  module.exports = { verifyRole };

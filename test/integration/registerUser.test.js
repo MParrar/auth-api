@@ -1,22 +1,22 @@
-const supertest = require("supertest");
-const { app } = require("../../src/app");
-const pool = require("../../src/config/db");
+const supertest = require('supertest');
+const { app } = require('../../src/app');
+const pool = require('../../src/config/db');
 
-jest.mock("../../src/services/emailServices", () => ({
+jest.mock('../../src/services/emailServices', () => ({
   sendEmail: jest.fn(),
 }));
 
-const { sendEmail } = require("../../src/services/emailServices");
+const { sendEmail } = require('../../src/services/emailServices');
 
 const userData = {
-  email: "register@example.com",
-  name: "John Doe",
-  password: "SecurePass123",
-  role: "user",
-  sessionToken: "mock-register-token",
+  email: 'register@example.com',
+  name: 'John Doe',
+  password: 'SecurePass123',
+  role: 'user',
+  sessionToken: 'mock-register-token',
 };
 
-describe("POST /api/register", () => {
+describe('POST /api/register', () => {
   beforeAll(async () => {
     await pool.query(
       `
@@ -36,10 +36,10 @@ describe("POST /api/register", () => {
     await pool.end();
   });
 
-  describe("Successful registration", () => {
-    it("should register a user and call sendEmail", async () => {
+  describe('Successful registration', () => {
+    it('should register a user and call sendEmail', async () => {
       const { statusCode, body } = await supertest(app)
-        .post("/api/users/register")
+        .post('/api/users/register')
         .send({
           name: userData.name,
           email: userData.email,
@@ -47,31 +47,31 @@ describe("POST /api/register", () => {
         });
 
       expect(statusCode).toBe(201);
-      expect(body.status).toEqual("success");
+      expect(body.status).toEqual('success');
       expect(sendEmail).toHaveBeenCalledTimes(1);
     });
   });
-  describe("given an empty payload", () => {
-    it("should return a 400", async () => {
+  describe('given an empty payload', () => {
+    it('should return a 400', async () => {
       const { statusCode, body } = await supertest(app)
-        .post("/api/users/register")
+        .post('/api/users/register')
         .send({});
         expect(statusCode).toBe(400);
-        expect(body.status).toEqual("error");
-        expect(body.message).toEqual("You need to provide name, email and password");
+        expect(body.status).toEqual('error');
+        expect(body.message).toEqual('You need to provide name, email and password');
     });
   });
-  describe("given an short password", () => {
-    it("should return a 400", async () => {
+  describe('given an short password', () => {
+    it('should return a 400', async () => {
       const { statusCode, body } = await supertest(app)
-        .post("/api/users/register")
+        .post('/api/users/register')
         .send({
             ...userData,
             password: '1234567'
         });
         expect(statusCode).toBe(400);
-        expect(body.status).toEqual("error");
-        expect(body.message).toEqual("The password must contain at least 8 characters");
+        expect(body.status).toEqual('error');
+        expect(body.message).toEqual('The password must contain at least 8 characters');
     });
   });
 });

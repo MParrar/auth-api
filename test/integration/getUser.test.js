@@ -1,17 +1,17 @@
-const supertest = require("supertest");
-const { app } = require("../../src/app");
-const pool = require("../../src/config/db");
+const supertest = require('supertest');
+const { app } = require('../../src/app');
+const pool = require('../../src/config/db');
 const { generateToken } = require('../../src/utils/token');
 
 const userData = {
-    email: "get@example.com",
-    name: "Jane Doe",
-    password: "Password123",
-    role: "user",
-    sessionToken: "mock-get-token",
+    email: 'get@example.com',
+    name: 'Jane Doe',
+    password: 'Password123',
+    role: 'user',
+    sessionToken: 'mock-get-token',
   };
   
-  describe("GET /api/users/profile", () => {
+  describe('GET /api/users/profile', () => {
     let userId;
     let token;
   
@@ -34,11 +34,11 @@ const userData = {
       await pool.end();
     });
   
-    describe("given a valid token", () => {
-      it("should return the user profile", async () => {
+    describe('given a valid token', () => {
+      it('should return the user profile', async () => {
         const {statusCode, body} = await supertest(app)
-        .get("/api/users/profile")
-        .set("Authorization", `Bearer ${token}`);
+        .get('/api/users/profile')
+        .set('Authorization', `Bearer ${token}`);
   
         expect(statusCode).toBe(200);
         expect(body.user).toEqual({
@@ -50,27 +50,27 @@ const userData = {
       });
     });
   
-    describe("given no token", () => {
-      it("should return a 401 error", async () => {
-        const { statusCode, body } = await supertest(app).get("/api/users/profile");
+    describe('given no token', () => {
+      it('should return a 401 error', async () => {
+        const { statusCode, body } = await supertest(app).get('/api/users/profile');
   
         expect(statusCode).toBe(401);
-        expect(body.status).toEqual("error");
-        expect(body.message).toEqual("Access Denied");
+        expect(body.status).toEqual('error');
+        expect(body.message).toEqual('Access Denied');
       });
     });
   
-    describe("given an invalid token", () => {
-      it("should return a 403 error", async () => {
-        const invalidToken = generateToken(userId, userData.role, "invalid-session-token");
+    describe('given an invalid token', () => {
+      it('should return a 403 error', async () => {
+        const invalidToken = generateToken(userId, userData.role, 'invalid-session-token');
   
         const { statusCode, body } = await supertest(app)
-          .get("/api/users/profile")
-          .set("Authorization", `Bearer ${invalidToken}`);
+          .get('/api/users/profile')
+          .set('Authorization', `Bearer ${invalidToken}`);
   
         expect(statusCode).toBe(403);
-        expect(body.status).toEqual("error");
-        expect(body.message).toEqual("Invalid or expired session");
+        expect(body.status).toEqual('error');
+        expect(body.message).toEqual('Invalid or expired session');
       });
     });
   });

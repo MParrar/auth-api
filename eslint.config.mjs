@@ -10,6 +10,7 @@ export default {
   globals: {
     process: 'readonly',
     ...globals.browser,
+    sourceType: 'module', 
   },
   extends: [
     pluginJs.configs.recommended,

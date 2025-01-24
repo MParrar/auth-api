@@ -35,7 +35,6 @@ const loginUser = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
-
   try {
     await sendPasswordResetEmail(email);
 
@@ -44,9 +43,15 @@ const forgotPassword = async (req, res) => {
       message: "Password reset link sent",
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ status: "error", message: "An unexpected error occurred" });
+    const errorMapping = {
+      "You need to provide an email": 400,
+    };
+    const statusCode = errorMapping[error.message] || 500;
+    const message = statusCode === 500 ? "Server error" : error.message;
+    return res.status(statusCode).json({
+      status: "error",
+      message,
+    });
   }
 };
 
@@ -54,9 +59,9 @@ const resetPassword = async (req, res) => {
   try {
     const { token, password } = req.body;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { email } = decoded;
+    const { userId } = decoded;
 
-    await resetUserPassword(email, token, password);
+    await resetUserPassword(userId, token, password);
 
     res.status(200).json({
       status: "success",
@@ -66,6 +71,7 @@ const resetPassword = async (req, res) => {
     const errorMapping = {
       "You need to provide token and password": 400,
       "The password must contain at least 8 characters": 400,
+      "User not found": 400
     };
 
     const statusCode = errorMapping[error.message] || 500;
@@ -87,8 +93,8 @@ const logout = async (req, res) => {
     });
   } catch (error) {
     res
-    .status(500)
-    .json({ status: "error", message: "An unexpected error occurred" });
+      .status(500)
+      .json({ status: "error", message: "An unexpected error occurred" });
   }
 };
 
@@ -96,5 +102,5 @@ module.exports = {
   loginUser,
   resetPassword,
   forgotPassword,
-  logout
+  logout,
 };

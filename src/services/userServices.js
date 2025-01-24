@@ -28,11 +28,7 @@ const createUser = async (req, name, email, password, role = "user") => {
     email,
     "Your account has been created successfully!",
     `
-      Hello ${name}, 
-      We're happy to inform you that your account has been created successfully. You can now access your account by clicking the link below:
-      Access your account: http://localhost:5173
-      If you have any questions or need assistance, feel free to contact us.
-      Best regards`
+      Hello ${name}, \n\nWe're happy to inform you that your account has been created successfully.\n\nAccess your account: ${process.env.FRONTEND_URL} \n\nBest regards`
   );
 
   if (role === "admin") {

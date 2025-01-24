@@ -9,8 +9,8 @@ const sendEmail = async (to, subject, text) => {
   });
 
   const sentFrom = new Sender(
-    "noreply@trial-7dnvo4dqd3rl5r86.mlsender.net",
-    "noreply"
+  `noreply@${process.env.EMAIL_SENDER}`,
+  "noreply"
   );
 
   const recipients = [new Recipient(to)];

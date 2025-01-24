@@ -1,7 +1,6 @@
 const supertest = require("supertest");
 const { app } = require("../../src/app");
 const pool = require("../../src/config/db");
-const bcrypt = require("bcryptjs");
 
 jest.mock("../../src/services/emailServices", () => ({
   sendEmail: jest.fn(),
@@ -49,7 +48,6 @@ describe("POST /api/register", () => {
 
       expect(statusCode).toBe(201);
       expect(body.status).toEqual("success");
-
       expect(sendEmail).toHaveBeenCalledTimes(1);
     });
   });

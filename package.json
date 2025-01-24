@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch src/server.js",
-    "test": "cross-env NODE_ENV=test jest",
-    "build": "echo 'No build step defined'",
-    "start": "node index.js"
+    "test": "cross-env NODE_ENV=test jest --coverage"
   },
   "author": "Matias Parra Rivas",
   "license": "ISC",

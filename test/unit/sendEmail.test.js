@@ -25,7 +25,7 @@ jest.mock('mailersend', () => {
   const { sendEmail } = require('../../src/services/emailServices');
   const dotenv = require('dotenv');
 
-  dotenv.config()
+  dotenv.config();
   
   describe('sendEmail', () => {
     beforeEach(() => {

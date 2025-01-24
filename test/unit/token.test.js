@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { generateToken } = require('../../src/utils/token');
 const dotenv = require('dotenv');
 
-dotenv.config()
+dotenv.config();
 
 jest.mock('jsonwebtoken');
 

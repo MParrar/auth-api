@@ -29,7 +29,7 @@ const userData = {
     });
   
     afterAll(async () => {
-      await pool.query(`DELETE FROM public.user WHERE id = $1;`, [userId]
+      await pool.query('DELETE FROM public.user WHERE id = $1;', [userId]
       );
       await pool.end();
     });
@@ -54,13 +54,13 @@ const userData = {
 
         expect(logoutResponse.statusCode).toBe(200);
         expect(logoutResponse.body.status).toEqual('success');
-        expect(logoutResponse.body.message).toEqual('User logout')
+        expect(logoutResponse.body.message).toEqual('User logout');
 
         const profileAfterLogoutResponse = await supertest(app)
         .get('/api/users/profile')
         .set('Authorization', `Bearer ${token}`);
         expect(profileAfterLogoutResponse.statusCode).toBe(403);
-        expect(profileAfterLogoutResponse.body.message).toBe('Invalid or expired session')
+        expect(profileAfterLogoutResponse.body.message).toBe('Invalid or expired session');
       });
     });
 

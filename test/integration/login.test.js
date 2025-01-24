@@ -29,7 +29,7 @@ describe('POST /api/login', () => {
   });
 
   afterAll(async () => {
-    await pool.query(`DELETE FROM public.user WHERE email = $1;`, [userData.email]
+    await pool.query('DELETE FROM public.user WHERE email = $1;', [userData.email]
     );
 
     await pool.end();

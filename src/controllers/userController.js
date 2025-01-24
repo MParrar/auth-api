@@ -91,7 +91,7 @@ const changePassword = async (req, res) => {
 
   try {
   
-    await changeUserPassword(req, id, password, req.user)
+    await changeUserPassword(req, id, password, req.user);
 
     res.status(200).json({
       status: 'success',
@@ -116,7 +116,7 @@ const archiveProfile = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await removeUser(req, id)
+    await removeUser(req, id);
 
     res.status(200).json({
       status: 'success',

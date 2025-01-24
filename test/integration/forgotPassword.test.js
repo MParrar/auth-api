@@ -38,7 +38,7 @@ describe('POST /forgot-password', () => {
   });
 
   afterAll(async () => {
-    await pool.query(`DELETE FROM public.user WHERE id = $1;`, [userId]);
+    await pool.query('DELETE FROM public.user WHERE id = $1;', [userId]);
     await pool.end();
   });
 

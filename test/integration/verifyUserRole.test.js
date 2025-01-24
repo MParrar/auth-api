@@ -19,7 +19,7 @@ const adminUser = {
   sessionToken: 'mock-admin-token',
 };
 
-describe(`User with 'user' role try to get an admin endpoint`, () => {
+describe('User with "user" role try to get an admin endpoint', () => {
   let userId;
   let token;
 
@@ -35,7 +35,7 @@ describe(`User with 'user' role try to get an admin endpoint`, () => {
   });
 
   afterAll(async () => {
-    await pool.query(`DELETE FROM public.user WHERE id = $1;`, [userId]);
+    await pool.query('DELETE FROM public.user WHERE id = $1;', [userId]);
   });
 
   it('should return access denied for the user role', async () => {
@@ -48,7 +48,7 @@ describe(`User with 'user' role try to get an admin endpoint`, () => {
   });
 });
 
-describe(`User with 'admin' role gets logs`, () => {
+describe('User with "admin" role gets logs', () => {
   let userId;
   let adminToken;
 
@@ -64,7 +64,7 @@ describe(`User with 'admin' role gets logs`, () => {
   });
 
   afterAll(async () => {
-    await pool.query(`DELETE FROM public.user WHERE id = $1;`, [userId]);
+    await pool.query('DELETE FROM public.user WHERE id = $1;', [userId]);
     await pool.end();
   });
 

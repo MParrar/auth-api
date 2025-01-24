@@ -1,10 +1,10 @@
 module.exports = {
-  testEnvironment: "node",
+  testEnvironment: 'node',
   testMatch: [
-    "**/test/**/*.test.js",
-    "**/test/**/*.spec.js",
+    '**/test/**/*.test.js',
+    '**/test/**/*.spec.js',
   ],
   collectCoverage: true,
   coverageReporters: ['text', 'lcov'],
-  testPathIgnorePatterns: ["\\\\node_modules\\\\"],
+  testPathIgnorePatterns: ['\\\\node_modules\\\\'],
 };
